@@ -12,6 +12,10 @@ import org.springframework.context.annotation.Configuration;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import me.light.mapper.ReplyMapper;
+import me.light.service.ReplyService;
+import me.light.service.ReplyServiceImpl;
+
 @Configuration
 @MapperScan("me.light.mapper")
 public class RootConfig {
@@ -33,6 +37,4 @@ public class RootConfig {
 		sqlSessionFactoryBean.setDataSource(dataSource());
 		return sqlSessionFactoryBean.getObject(); 
 	}
-	
-	
 }
