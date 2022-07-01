@@ -90,7 +90,7 @@ public class UploadController {
 					FileOutputStream tumbnail = new FileOutputStream(
 							new File(uploadPath,"s_"+uploadFileName));
 					Thumbnailator
-					.createThumbnail(multipartFile.getInputStream(), tumbnail, 100, 100);
+					.createThumbnail(multipartFile.getInputStream(), tumbnail, 50, 50);
 				}
 				list.add(attachFileDTO); // 리스트 추가 
 			} catch (Exception e) {
@@ -159,6 +159,7 @@ public class UploadController {
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<String>("deleted", HttpStatus.OK); 
 	}
