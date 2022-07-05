@@ -23,5 +23,6 @@ public class Board {
 	private LocalDateTime regDate; 
 	private LocalDateTime updateDate;
 	
-	private List<BoardAttachVO> attachList; 
+	private List<BoardAttachVO> attachList;
+
 }

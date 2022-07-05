@@ -1,6 +1,6 @@
 package me.light.mapper;
 
-import java.util.List;import me.light.controller.BaordController;
+import java.util.List;import me.light.controller.BoardController;
 import me.light.model.BoardAttachVO;
 
 public interface BoardAttachMapper {

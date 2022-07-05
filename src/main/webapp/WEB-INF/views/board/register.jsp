@@ -67,10 +67,12 @@ function showUploadResult(uploadResultArr){
 	if(!uploadResultArr || uploadResultArr.length == 0) return;
 	let str = "";
 	$(uploadResultArr).each(function(i,obj){
-		if(!obj.image){ // 이미지가 아닌 경우 
+		if(!obj.fileType){ // 이미지가 아닌 경우 
 			let fileCellPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_"+obj.fileName);
 			
-			str+= "<li class='list-group-item'><img src='${contextPath}/resources/img/attach.png' style='width:50px;' >"
+			str+= "<li class='list-group-item' data-path='"+obj.uploadPath+"' ";
+			str+= "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.fileType+"'>";
+			str+= "<img src='${contextPath}/resources/img/attach.png' style='width:50px;' >"
 			str+= "<a href='${contextPath}/download?fileName="+fileCellPath+"'>"+obj.fileName+"</a>"
 			str+= "<div class='d-flex justify-content-end'><span data-file='"+fileCellPath+"' data-type='file'>삭제</span></div>"						
 			str+="</li>"
@@ -79,7 +81,9 @@ function showUploadResult(uploadResultArr){
 			let originPath = obj.uploadPath+"\\"+obj.uuid+"_"+obj.fileName;
 			originPath = originPath.replace(new RegExp(/\\/g),"/");
 			
-			str += "<li class='list-group-item'><img src='${contextPath}/display?fileName="+fileCellPath+"'>";
+			str+= "<li class='list-group-item' data-path='"+obj.uploadPath+"' ";
+			str+= "data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.fileType+"'>";
+			str += "<img src='${contextPath}/display?fileName="+fileCellPath+"'>";
 			str += "<a href='javascript:showImage(\""+originPath+"\")'>이미지원본보기</a>";
 			str += "<div class='d-flex justify-content-end'><span data-file='"+fileCellPath+"' data-type='image'>삭제</span></div>"
 			str += "</li>" 
@@ -92,9 +96,24 @@ $(function(){
 	let form = $('#registerForm');
 	let submitBtn = $('#registerForm button');
 	
+	// 글쓰기 처리 
 	submitBtn.on('click',function(e){
 		e.preventDefault();
-		console.log("폼 기본동작 금지");
+		// console.log("폼 기본동작 금지");
+		
+		let str = "";
+		$('.uploadResult li').each(function(i,obj){
+			let jobj = $(obj);
+			// console.log(jobj);
+			//console.log(jobj.data('filename'));
+			
+			str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data('filename')+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data('uuid')+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data('path')+"'>";
+			str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+jobj.data('type')+"'>";
+			
+		});
+		form.append(str).submit();
 	})
 	
 	// 파일업로드 
