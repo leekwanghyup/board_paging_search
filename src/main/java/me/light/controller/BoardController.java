@@ -1,5 +1,9 @@
 package me.light.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,12 +61,16 @@ public class BoardController {
 	}
 	
 	@PostMapping("/remove")
-	public String modify(Long bno, RedirectAttributes rttr) {
+	public String remove(Long bno, RedirectAttributes rttr) {
+		List<BoardAttachVO> attachList = service.getAttachList(bno);
+		deleteFiles(attachList);
+		
 		service.remove(bno);
 		rttr.addFlashAttribute("message", bno);
 		return "redirect:list";
 	}
 	
+
 	@GetMapping("/register")
 	public String registerForm() {
 		return "board/register";
@@ -82,5 +90,24 @@ public class BoardController {
 		return new ResponseEntity<>(attachList, HttpStatus.OK);
 	}
 	
+	public void deleteFiles(List<BoardAttachVO> attachList) {
+		if(attachList==null || attachList.size()==0) return; 
+			
+		attachList.forEach(attach -> {
+			Path file = Paths.get("C:/storage/"+attach.getUploadPath()+"/"+attach.getUuid()+"_"+attach.getFileName());
+			System.out.println(file);
+			try {
+				Files.deleteIfExists(file);
+				if(Files.probeContentType(file).startsWith("image")) {
+					Path thumbNail = Paths.get("C:/storage/"+attach.getUploadPath()+"/s_"+attach.getUuid()+"_"+attach.getFileName());
+					System.out.println(thumbNail);
+					Files.deleteIfExists(thumbNail);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		});
+	}
 	
 }

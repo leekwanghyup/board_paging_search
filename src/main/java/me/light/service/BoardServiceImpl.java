@@ -48,8 +48,10 @@ public class BoardServiceImpl implements BoardService {
 		boardMapper.update(board);
 	}
 
+	@Transactional
 	@Override
 	public void remove(Long bno) {
+		attachMapper.deleteAll(bno);
 		boardMapper.delete(bno);
 	}
 
