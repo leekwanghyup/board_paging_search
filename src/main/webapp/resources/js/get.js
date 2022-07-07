@@ -104,9 +104,8 @@ $(function(){
 		})
 	})
 	
-	// 댓글리스트 불러오기 
+	// 첨부파일 리스트 불러오기 
 	$.getJSON(contextPath+"/board/getAttachList", {bno : bnoValue}, function(attachList){
-		
 		let str = "";
 		$(attachList).each(function(i,obj){
 			if(!obj.fileType){ // 이미지가 아닌 경우 

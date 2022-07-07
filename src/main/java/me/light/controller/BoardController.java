@@ -62,6 +62,7 @@ public class BoardController {
 	
 	@PostMapping("/remove")
 	public String remove(Long bno, RedirectAttributes rttr) {
+		
 		List<BoardAttachVO> attachList = service.getAttachList(bno);
 		deleteFiles(attachList);
 		
