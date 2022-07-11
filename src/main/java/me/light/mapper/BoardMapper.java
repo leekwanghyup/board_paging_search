@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import me.light.model.Board;
+import me.light.model.BoardAttachVO;
 import me.light.model.Criteria;
 
 public interface BoardMapper {
@@ -18,4 +19,6 @@ public interface BoardMapper {
 		@Param("bno") Long bno, 
 		@Param("amount") int amount
 	);
+	
+	List<BoardAttachVO> attachList(Long bno); 
 }

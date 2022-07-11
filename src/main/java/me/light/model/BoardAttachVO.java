@@ -17,4 +17,14 @@ public class BoardAttachVO {
 	private String fileName; 
 	private boolean fileType; 
 	private Long bno;
+	
+	public String getImageName() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(uploadPath.replace("\\", "/"))
+			.append("/")
+			.append(uuid)
+			.append("_")
+			.append(fileName);
+		return builder.toString();
+	}
 }

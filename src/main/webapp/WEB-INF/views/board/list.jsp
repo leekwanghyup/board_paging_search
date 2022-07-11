@@ -44,16 +44,29 @@
 			</td>
 			<td>${b.writer }</td>
 			<td>
-				<fmt:parseDate pattern="yyyyy-MM-dd'T'HH:mm:ss"  var="regDate" value="${b.regDate}" />
+				<fmt:parseDate pattern="yyyyy-MM-dd'T'HH:mm"  var="regDate" value="${b.regDate}" />
 				<fmt:formatDate value="${regDate}" pattern="yyyy-MM-dd"/>
 			</td>
 			<td>
-				<fmt:parseDate pattern="yyyyy-MM-dd'T'HH:mm:ss"  var="updateDate" value="${b.updateDate }" />
+				<fmt:parseDate pattern="yyyyy-MM-dd'T'HH:mm"  var="updateDate" value="${b.updateDate }" />
 				<fmt:formatDate value="${updateDate}" pattern="yyyy-MM-dd"/>
 			</td>
 		</tr>
 		</c:forEach>
 	</table>
+	
+	<div class="d-flex">
+		<c:forEach items="${list}" var="b">
+			<c:if test="${not empty b.attachList}">
+			<div>
+				<a href="${b.bno}" class="get">
+					<img alt="" src="${contextPath}/display?fileName=${b.attachList[0].imageName}" style="width:200px;">
+				</a>
+			</div>
+			</c:if>
+		</c:forEach>
+	</div>
+	
 	<div class="pagination">
 		<c:if test="${pageMaker.prev }">
 			<a href="${pageMaker.startPage - 1}">[이전페이지]</a>
@@ -94,6 +107,8 @@ $(function(){
 		listForm.attr("action","get");
 		listForm.submit();
 	})
+	
+	
 	
 })
 </script>

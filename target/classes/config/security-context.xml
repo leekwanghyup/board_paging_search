@@ -9,19 +9,23 @@
 		<property name="content" value="ImportResource 테스트" />
 	</bean>
 	
+	<bean id="customAccessDeniedHandler" class="me.light.security.CustomAccessDeniedHandler"/>
+	<bean id="customLoginSuccessHandler" class="me.light.security.CustomLoginSuccessHandler"/>
+	<bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	
 	<sec:http>
-		<sec:intercept-url pattern="/security/all" access="permitAll" />
-		<sec:intercept-url pattern="/security/member" access="hasRole('ROLE_MEMBER')" />
+		<sec:intercept-url pattern="/security/all" access="permitAll" /> 
+		<sec:intercept-url pattern="/security/member" access="hasRole('ROLE_USER')" />
 		<sec:intercept-url pattern="/security/admin" access="hasRole('ROLE_ADMIN')" />
-		<sec:form-login/>	
+		<sec:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccessHandler" />
+		<sec:logout logout-url="/customLogout" invalidate-session="true" />		
+		<sec:access-denied-handler ref="customAccessDeniedHandler" />
 	</sec:http>
 	
 	<sec:authentication-manager>
 		<sec:authentication-provider>
-			<sec:user-service>
-				<sec:user name="leekwanghyup" password="{noop}1234" authorities="ROLE_MEMBER"/>
-				<sec:user name="superkwanghyup" password="{noop}1234" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
-			</sec:user-service>
+			<sec:jdbc-user-service data-source-ref="dataSource"/>
+			<sec:password-encoder ref="bCryptPasswordEncoder"/>
 		</sec:authentication-provider>
 	</sec:authentication-manager>
 
