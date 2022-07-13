@@ -19,7 +19,9 @@ public class Board {
 	private String title;  
 	private String content;  
 	private String writer;  
-	private int replyCnt; 
+	private int replyCnt;
+	private Long viewCount;
+	
 	private LocalDateTime regDate; 
 	private LocalDateTime updateDate;
 	

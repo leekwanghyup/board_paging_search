@@ -1,13 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../layout/header.jspf" %>
-<div class="container">
+<sec:authentication property="principal.memberVO" var="memberVO"/>
+<sec:authentication property="principal.username" var="writer"/>
 
+<div class="container">
 <div class="article_register my-4">
 	<h3>게시글 쓰기</h3>
 </div>
 
 <form action="register" method="post" id="registerForm">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	<div class="form-group">
 		<label for="title">제목 :</label>
 		<input type="text" name="title" id="title" class="form-control">
@@ -18,7 +21,8 @@
 	</div>
 	<div class="form-group">
 			<label for="writer">작성자 : </label>
-			<input type="text" name="writer" class="form-control">
+			<input type="text" name="writer" readonly="readonly"
+				class="form-control" value="${writer}">
 		</div>
 	<div class="d-flex justify-content-end">
 		

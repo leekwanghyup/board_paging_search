@@ -3,29 +3,39 @@
     pageEncoding="UTF-8"%>
 <%@ include file="../layout/header.jspf" %>
 <script src="${contextPath}/resources/js/get.js"></script>
+<sec:authorize access="isAuthenticated()">
+	<sec:authentication property="principal.username" var="userId" />
+</sec:authorize>
+
 <div class="container">
+	
 	<div class="getData">
 		<input type="hidden" name="page" id="page" value="${param.page}">
 		<input type="hidden" name="type" id="type" value="${param.type}">
 		<input type="hidden" name="keyword" id="keyword" value="${param.keyword}">
+		<input type="hidden" name="writer" id="writer" value="${board.writer}">
 	</div>
 	<form id="getForm">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		<input type="hidden" name="bno" value="${board.bno}">
 		<div>
 			<h3>${board.title }</h3>
 			<p>작성자 : ${board.writer }</p>
 			<p>
 				등록일 :  
-				<fmt:parseDate var="regDate" value="${board.regDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" />
+				<fmt:parseDate var="regDate" value="${board.regDate }" pattern="yyyy-MM-dd'T'HH:mm" />
 				<fmt:formatDate value="${regDate}" pattern="yyyy년MM월dd일 HH시mm분"/>
 				수정일 : 
-				<fmt:parseDate var="updateDate" value="${board.updateDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" />
+				<fmt:parseDate var="updateDate" value="${board.updateDate }" pattern="yyyy-MM-dd'T'HH:mm" />
 				<fmt:formatDate value="${updateDate}" pattern="yyyy년MM월dd일 HH시mm분"/>
+				조회수 : ${board.viewCount}
 			</p>
 			<p>${board.content}</p>
 		</div>
-		<button class="btn btn-warning modify">수정</button>
-		<button class="btn btn-danger remove">삭제</button>
+		<c:if test="${userId eq board.writer}">
+			<button class="btn btn-warning modify">수정</button>
+			<button class="btn btn-danger remove">삭제</button>
+		</c:if>
 		<button class="btn btn-primary list">목록</button>
 	</form>
 	
@@ -46,9 +56,14 @@
 	
 	
 	<!-- 댓글 등록 -->
+	<sec:authorize access="isAuthenticated()">
 	<button id="addReplyBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#replyForm">
   		댓글 등록
 	</button>
+	</sec:authorize>
+	<sec:authorize access="isAnonymous()">
+		댓글을 등록하시려면 로그인하세요
+	</sec:authorize>
 	<div>
 		댓글수 ${board.replyCnt}
 	</div> 
@@ -120,6 +135,7 @@ $(function(){
 		getForm.submit();	
 	})
 	$('#getForm .remove').on('click',function(){ // 삭제처리
+		getForm.append($('#writer'))
 		getForm.attr("method","post");
 		getForm.attr("action","remove");
 		getForm.submit();

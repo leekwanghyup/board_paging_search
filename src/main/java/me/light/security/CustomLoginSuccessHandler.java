@@ -10,31 +10,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler{
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication auth) throws IOException, ServletException {
 		System.out.println("로그인성공");
-		System.out.println(auth.getAuthorities());
-		List<String> roleNames = new ArrayList<String>(); 
 		
-		auth.getAuthorities().forEach(authority ->{
-			roleNames.add(authority.getAuthority());
-		});
-		
-		if(roleNames.contains("ROLE_ADMIN")) {
-			System.out.println("관리자 로그인");
-			response.sendRedirect(request.getContextPath()+"/security/admin");
-			return;
-		}
-		
-		if(roleNames.contains("ROLE_MEMBER")) {
-			System.out.println("회원 로그인");
-			response.sendRedirect(request.getContextPath()+"/security/member");
-			return;
-		}
+		System.out.println(request.getRequestURI());
 		
 		response.sendRedirect(request.getContextPath()+"/");
 	}

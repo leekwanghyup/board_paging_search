@@ -4,8 +4,11 @@ import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration.Dynamic;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import me.light.common.CommonFilter;
 
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer{
 
